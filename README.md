@@ -1,27 +1,42 @@
 # SDN Traffic Monitoring using POX and Mininet
 
-A Software Defined Networking (SDN) based traffic monitoring system built with the POX controller and Mininet. Collects real-time flow statistics — packet count and byte count — via OpenFlow.
+## 📌 Problem Statement
+
+This project implements a Software Defined Networking (SDN) based traffic monitoring system using the POX controller and Mininet.
+The goal is to demonstrate controller-switch interaction, OpenFlow-based flow rule design (match–action), and real-time network behavior monitoring.
 
 ---
 
-## Tech Stack
+## 🎯 Objectives
 
-| Tool | Role |
-|------|------|
-| [Mininet](http://mininet.org/) | Network emulator |
-| [POX Controller](https://github.com/noxrepo/pox) | SDN controller |
-| OpenFlow | Controller-switch communication protocol |
-| Python | Controller logic |
+* Demonstrate SDN architecture using controller and switches
+* Implement OpenFlow-based communication
+* Handle `packet_in` events in the controller
+* Monitor real-time traffic statistics (packets and bytes)
+* Validate network behavior using test scenarios
 
 ---
 
-## Setup
+## 🛠 Tech Stack
+
+| Tool           | Role                            |
+| -------------- | ------------------------------- |
+| Mininet        | Network emulator                |
+| POX Controller | SDN controller                  |
+| OpenFlow       | Controller-switch communication |
+| Python         | Controller logic implementation |
+
+---
+
+## ⚙️ Setup Instructions
 
 ### Prerequisites
 
-- Linux (Ubuntu recommended)
-- Mininet installed
-- POX cloned locally
+* Linux (Ubuntu recommended)
+* Mininet installed
+* POX controller cloned
+
+---
 
 ### 1. Start the POX Controller
 
@@ -29,9 +44,11 @@ A Software Defined Networking (SDN) based traffic monitoring system built with t
 python3 pox.py misc.traffic_monitor
 ```
 
+---
+
 ### 2. Start Mininet Topology
 
-In a separate terminal:
+In a new terminal:
 
 ```bash
 sudo mn --topo single,3 --controller remote
@@ -39,25 +56,79 @@ sudo mn --topo single,3 --controller remote
 
 ---
 
-## Running the Experiment
+## 🚀 Running the Experiment
 
-Inside the Mininet CLI, run:
+Inside Mininet CLI:
 
 ```bash
 # Test connectivity
 pingall
 
-# Generate continuous traffic
+# Generate traffic
 h1 ping h2
 ```
 
-Monitor the POX controller terminal for:
-- `packet_in` events from switches
-- Periodic flow statistics (packet count, byte count)
+---
+
+## ⚡ Controller Functionality
+
+* Handles `packet_in` events from switches
+* Installs flow rules using OpenFlow
+* Collects flow statistics periodically:
+
+  * Packet count
+  * Byte count
 
 ---
 
-## Sample Output
+## 🔁 Flow Rule Logic (Match–Action)
+
+The controller dynamically installs flow rules based on incoming packets.
+
+**Example Flow Rule:**
+
+* Match: Source = h1, Destination = h2
+* Action: Forward packet to the destination port
+
+These rules are installed when a `packet_in` event is triggered by the switch.
+
+---
+
+## 🧪 Test Scenarios
+
+### ✅ Test Case 1 — Normal Traffic
+
+* Hosts communicate successfully (h1 → h2)
+* No packet loss observed
+* Ping results confirm connectivity
+
+---
+
+### ✅ Test Case 2 — Traffic Monitoring
+
+* Controller receives flow statistics
+* Packet and byte count increase with traffic
+* Logs are displayed in controller terminal
+
+---
+
+### ⚠️ Test Case 3 — No Traffic Scenario
+
+* When no traffic is generated, no flow statistics are observed
+* Demonstrates dependency on active traffic for monitoring
+
+---
+
+## 📊 Expected Output
+
+* Successful ping between hosts
+* Flow rules installed in switches
+* Controller logs showing:
+
+  * packet_in events
+  * flow statistics (packets & bytes)
+
+Example:
 
 ```
 [INFO] Flow stats received from switch
@@ -67,41 +138,65 @@ Packets=22  Bytes=2156
 
 ---
 
-## Test Cases
+## 📸 Proof of Execution
 
-**Test 1 — Normal Traffic**
-- Host-to-host communication (`h1 → h2`) works without packet loss
-- Ping packets are transmitted successfully
+### Flow Table
 
-**Test 2 — Traffic Monitoring**
-- Flow statistics are collected and logged by the controller
-- Packet and byte counts increase proportionally with traffic
+![Flow Table](screenshots/flow_table.png)
 
----
+### Ping Results
 
-## Key Concepts Demonstrated
+![Ping](screenshots/ping.png)
 
-- SDN architecture and controller-switch separation
-- OpenFlow protocol for flow rule installation
-- Dynamic flow management based on packet-in events
-- Real-time network monitoring via flow statistics
+### Controller Logs
+
+![Logs](screenshots/controller_logs.png)
 
 ---
 
-## Project Structure
+## 🧠 Key Concepts Demonstrated
+
+* SDN architecture (control plane vs data plane)
+* Controller-switch interaction
+* OpenFlow protocol usage
+* Flow rule design (match → action)
+* Handling packet_in events
+* Real-time traffic monitoring
+
+---
+
+## 🔍 Validation
+
+* Connectivity validated using `pingall`
+* Traffic behavior observed via controller logs
+* Flow statistics confirm correct monitoring
+* Traffic can be further analyzed using tools like Wireshark or iperf
+
+---
+
+## 📁 Project Structure
 
 ```
 .
 ├── pox/
 │   └── misc/
-│       └── traffic_monitor.py   # Custom POX component
+│       └── traffic_monitor.py   # Custom POX controller logic
+├── screenshots/                # Execution proof images
 └── README.md
 ```
 
 ---
 
-## References
+## 📚 References
 
-- [POX Documentation](https://noxrepo.github.io/pox-doc/html/)
-- [Mininet Walkthrough](http://mininet.org/walkthrough/)
-- [OpenFlow Spec](https://opennetworking.org/sdn-resources/openflow/)
+* POX Documentation
+* Mininet Walkthrough
+* OpenFlow Specification
+
+---
+
+## ✅ Conclusion
+
+This project successfully demonstrates how SDN enables centralized control and monitoring of network traffic using Mininet and POX. It highlights the use of OpenFlow for dynamic flow management and real-time network visibility.
+
+---
